@@ -5,6 +5,7 @@ import { ITodo } from '../types';
 
 interface ITodosState {
   todos: ITodo[];
+  setTodos: (todo: ITodo[]) => void;
   addTodo: (todo: string) => void;
   toggleTodo: (id: number) => void;
   deleteTodo: (id: number) => void;
@@ -15,6 +16,8 @@ export const useTodosStore = create<ITodosState>()(
   devtools(
     (set) => ({
       todos: [],
+      setTodos: (todos) =>
+        set(() => ({ todos }), undefined, 'TodosStore/setTodos'),
       addTodo: (todo) =>
         set(
           (state) => ({

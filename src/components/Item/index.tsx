@@ -1,3 +1,6 @@
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
 import iconCheck from '../../assets/images/icon-check.svg';
 import iconCross from '../../assets/images/icon-cross.svg';
 import { useTodosStore } from '../../store';
@@ -9,9 +12,19 @@ interface IItemProps {
 
 export default function Item({ todo }: IItemProps) {
   const { toggleTodo, deleteTodo } = useTodosStore();
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: todo.id });
+
+  const style = { transform: CSS.Transform.toString(transform), transition };
 
   return (
-    <div className="flex items-center bg-white dark:bg-very-dark-desaturated-blue w-full py-4 px-5 gap-3 border-b dark:border-very-dark-grayish-blue-dark2">
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="flex items-center bg-white dark:bg-very-dark-desaturated-blue w-full py-4 px-5 gap-3 border-b dark:border-very-dark-grayish-blue-dark2"
+    >
       <button
         className={`flex items-center justify-center w-5 h-5 rounded-full  ${
           todo.completed

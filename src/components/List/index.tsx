@@ -1,4 +1,13 @@
 import { useMemo, useState } from 'react';
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import { arrayMove, SortableContext } from '@dnd-kit/sortable';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 import Item from '../Item';
 import { useTodosStore } from '../../store';
@@ -6,7 +15,15 @@ import Filters from '../Filters';
 
 export default function List() {
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
-  const { todos, clearCompletedTodos } = useTodosStore();
+  const { todos, clearCompletedTodos, setTodos } = useTodosStore();
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    })
+  );
+
   const filteredTodos = useMemo(
     () =>
       filter === 'all'
@@ -21,12 +38,30 @@ export default function List() {
     [todos]
   );
 
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = todos.findIndex((todo) => todo.id === active.id);
+      const newIndex = todos.findIndex((todo) => todo.id === over.id);
+      const updatedTodos = arrayMove(todos, oldIndex, newIndex);
+      setTodos(updatedTodos);
+    }
+  }
+
   return (
     <>
       <div className="overflow-y-auto rounded rounded-b-none flex flex-col overflow-hidden">
-        {filteredTodos.map((todo) => (
-          <Item key={todo.id} todo={todo} />
-        ))}
+        <DndContext
+          onDragEnd={handleDragEnd}
+          modifiers={[restrictToVerticalAxis]}
+          sensors={sensors}
+        >
+          <SortableContext items={todos}>
+            {filteredTodos.map((todo) => (
+              <Item key={todo.id} todo={todo} />
+            ))}
+          </SortableContext>
+        </DndContext>
       </div>
       {!!todos.length && (
         <>
