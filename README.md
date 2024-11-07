@@ -35,6 +35,6 @@ Mobile Design
 
 ### Built with
 
-- [React](https://angular.dev/) - React framework
+- [React](https://react.dev/) - React framework
 - [Tailwind CSS](https://tailwindcss.com/) - For styles
 - [dnd kit](https://dndkit.com/) - For Drag and drop
