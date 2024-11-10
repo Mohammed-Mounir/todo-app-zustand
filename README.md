@@ -36,5 +36,6 @@ Mobile Design
 ### Built with
 
 - [React](https://react.dev/) - React framework
-- [Tailwind CSS](https://tailwindcss.com/) - For styles
-- [dnd kit](https://dndkit.com/) - For Drag and drop
+- [Zustand](https://zustand-demo.pmnd.rs/) - State management
+- [Tailwind CSS](https://tailwindcss.com/) - Styles
+- [dnd kit](https://dndkit.com/) - Drag and drop
